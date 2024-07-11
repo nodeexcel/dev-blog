@@ -45,5 +45,18 @@ router.get("/", async (req, res, next) => {
  * @param {Function} next - The next middleware function.
  * @returns {Promise<void>}
  */
+router.get("/post/:slug", async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ slug: req.params.slug }); //Find post from database
+    if (!post) {
+      // Handle case when post is not found
+      return res.status(404).send("Post not found");
+    }
+
+    res.render("post", { post, title: post.title });
+  } catch (error) {
+    next(error); //handle error
+  }
+});
 
 module.exports = router;
